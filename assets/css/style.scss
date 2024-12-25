@@ -1,0 +1,245 @@
+$mainColor: #DB4444;
+
+* {
+    font-family: "Poppins", serif;
+}
+
+header {
+    > div:nth-child(1) {
+        .container {
+            .content {
+                width: fit-content;
+                
+                select {
+                    outline: none;
+                    cursor: pointer;
+                    
+                    option {
+                        background-color: #1a1d20;
+                    }
+                }
+            }
+        }
+    }
+    
+    nav {
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+        
+        .container {
+            > div {
+                > div {
+                    a {
+                        color: #000 !important;
+                    }
+                    
+                    .active {
+                        color: $mainColor !important;
+                        border-bottom: 1px solid $mainColor;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#carouselIndicators {
+    height: 80vh;
+    
+    .loading-cont {
+        height: inherit;
+    }
+    
+    .carousel-indicators {
+        //bottom: -60px !important;
+        button {
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        .active {
+            background-color: $mainColor !important;
+            border: 2px solid #fff;
+        }
+    }
+    
+    .carousel-inner {
+        .carousel-item {
+            .img-cont {
+                height: 70vh;
+                
+                img {
+                    width: 100%;
+                    max-width: 100%;
+                    height: auto;
+                    object-fit: contain;
+                    object-position: center center;
+                }
+            }
+        }
+    }
+    
+}
+
+.browse-cont {
+    .container {
+        h3 {
+            color: $mainColor;
+            font-weight: 600;
+            position: relative;
+            font-size: 16px;
+            margin-left: 50px;
+            
+            &::before {
+                content: "";
+                position: absolute;
+                left: -50px;
+                top: -30%;
+                width: 30px;
+                height: 180%;
+                background-color: $mainColor;
+                border-radius: 5px;
+            }
+        }
+        
+        .btn-cont {
+            width: 100%;
+            margin: auto 0;
+            @media (min-width: 992px) {
+                width: 70%;
+                margin: 0;
+            }
+            
+            div {
+                button {
+                    border: 1px solid rgba(0, 0, 0, 0.5);
+                    background-color: transparent;
+                    font-weight: 600;
+                    transition: all 300ms linear;
+                    cursor: pointer;
+                    
+                    svg {
+                        stroke: black;
+                    }
+                    
+                    &:hover {
+                        background-color: $mainColor;
+                        border: 1px solid $mainColor;
+                        color: #fff;
+                        
+                        svg {
+                            stroke: #fff;
+                        }
+                    }
+                }
+                
+                .btn-active {
+                    background-color: $mainColor;
+                    border: 1px solid $mainColor;
+                    color: #fff;
+                }
+                
+                .svg-active {
+                    stroke: #fff;
+                }
+            }
+        }
+    }
+}
+
+.selling {
+    .container {
+        .header {
+            .sort-btns {
+                button {
+                    background-color: transparent;
+                    border: none;
+                    transition: all 100ms linear;
+                    border-radius: 50%;
+                    
+                    i {
+                        font-size: 25px;
+                    }
+                    
+                    &:hover {
+                        transform: scale(1.15);
+                        
+                        i {
+                            color: $mainColor;
+                        }
+                    }
+                }
+                
+                .sort-btn-active {
+                    box-shadow: 0 0 5px #333;
+                }
+            }
+        }
+        
+        .content {
+            .row {
+                .item-cont {
+                    > div:nth-child(1) {
+                        background-color: #F5F5F5;
+                        
+                        > div {
+                            > button {
+                                width: 30px;
+                                height: 30px;
+                                background-color: #fff;
+                                transition: all 100ms linear;
+                                
+                                &:hover {
+                                    background-color: $mainColor;
+                                    transform: scale(1.1);
+                                    
+                                    i {
+                                        color: #fff;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// loading
+@keyframes spikeUp {
+    0% {
+        background-size: 5px 40px;
+    }
+    16% {
+        background-size: 5px 55px, 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 40px;
+    }
+    33% {
+        background-size: 5px 40px, 5px 55px, 5px 40px, 5px 40px, 5px 40px, 5px 40px;
+    }
+    50% {
+        background-size: 5px 40px, 5px 40px, 5px 55px, 5px 40px, 5px 40px, 5px 40px;
+    }
+    66% {
+        background-size: 5px 40px, 5px 40px, 5px 40px, 5px 55px, 5px 40px, 5px 40px;
+    }
+    83% {
+        background-size: 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 55px, 5px 40px;
+    }
+    100% {
+        background-size: 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 55px;
+    }
+}
+
+.loader {
+    position: relative;
+    width: 55px;
+    height: 55px;
+    background-repeat: no-repeat;
+    background-image: linear-gradient($mainColor 50px, transparent 0), linear-gradient($mainColor 50px, transparent 0), linear-gradient($mainColor 50px, transparent 0), linear-gradient($mainColor 50px, transparent 0), linear-gradient($mainColor 50px, transparent 0), linear-gradient($mainColor 50px, transparent 0);
+    background-size: 5px 40px;
+    background-position: 0 center, 10px center, 20px center, 30px center, 40px center, 50px center;
+    animation: spikeUp 1s linear infinite alternate;
+}
+

@@ -1,0 +1,176 @@
+* {
+  font-family: "Poppins", serif;
+}
+
+header > div:nth-child(1) .container .content {
+  width: fit-content;
+}
+header > div:nth-child(1) .container .content select {
+  outline: none;
+  cursor: pointer;
+}
+header > div:nth-child(1) .container .content select option {
+  background-color: #1a1d20;
+}
+header nav {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+}
+header nav .container > div > div a {
+  color: #000 !important;
+}
+header nav .container > div > div .active {
+  color: #DB4444 !important;
+  border-bottom: 1px solid #DB4444;
+}
+
+#carouselIndicators {
+  height: 80vh;
+}
+#carouselIndicators .loading-cont {
+  height: inherit;
+}
+#carouselIndicators .carousel-indicators button {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+#carouselIndicators .carousel-indicators .active {
+  background-color: #DB4444 !important;
+  border: 2px solid #fff;
+}
+#carouselIndicators .carousel-inner .carousel-item .img-cont {
+  height: 70vh;
+}
+#carouselIndicators .carousel-inner .carousel-item .img-cont img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.browse-cont .container h3 {
+  color: #DB4444;
+  font-weight: 600;
+  position: relative;
+  font-size: 16px;
+  margin-left: 50px;
+}
+.browse-cont .container h3::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: -30%;
+  width: 30px;
+  height: 180%;
+  background-color: #DB4444;
+  border-radius: 5px;
+}
+.browse-cont .container .btn-cont {
+  width: 100%;
+  margin: auto 0;
+}
+@media (min-width: 992px) {
+  .browse-cont .container .btn-cont {
+    width: 70%;
+    margin: 0;
+  }
+}
+.browse-cont .container .btn-cont div button {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 300ms linear;
+  cursor: pointer;
+}
+.browse-cont .container .btn-cont div button svg {
+  stroke: black;
+}
+.browse-cont .container .btn-cont div button:hover {
+  background-color: #DB4444;
+  border: 1px solid #DB4444;
+  color: #fff;
+}
+.browse-cont .container .btn-cont div button:hover svg {
+  stroke: #fff;
+}
+.browse-cont .container .btn-cont div .btn-active {
+  background-color: #DB4444;
+  border: 1px solid #DB4444;
+  color: #fff;
+}
+.browse-cont .container .btn-cont div .svg-active {
+  stroke: #fff;
+}
+
+.selling .container .header .sort-btns button {
+  background-color: transparent;
+  border: none;
+  transition: all 100ms linear;
+  border-radius: 50%;
+}
+.selling .container .header .sort-btns button i {
+  font-size: 25px;
+}
+.selling .container .header .sort-btns button:hover {
+  transform: scale(1.15);
+}
+.selling .container .header .sort-btns button:hover i {
+  color: #DB4444;
+}
+.selling .container .header .sort-btns .sort-btn-active {
+  box-shadow: 0 0 5px #333;
+}
+.selling .container .content .row .item-cont > div:nth-child(1) {
+  background-color: #F5F5F5;
+}
+.selling .container .content .row .item-cont > div:nth-child(1) > div > button {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  transition: all 100ms linear;
+}
+.selling .container .content .row .item-cont > div:nth-child(1) > div > button:hover {
+  background-color: #DB4444;
+  transform: scale(1.1);
+}
+.selling .container .content .row .item-cont > div:nth-child(1) > div > button:hover i {
+  color: #fff;
+}
+
+@keyframes spikeUp {
+  0% {
+    background-size: 5px 40px;
+  }
+  16% {
+    background-size: 5px 55px, 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 40px;
+  }
+  33% {
+    background-size: 5px 40px, 5px 55px, 5px 40px, 5px 40px, 5px 40px, 5px 40px;
+  }
+  50% {
+    background-size: 5px 40px, 5px 40px, 5px 55px, 5px 40px, 5px 40px, 5px 40px;
+  }
+  66% {
+    background-size: 5px 40px, 5px 40px, 5px 40px, 5px 55px, 5px 40px, 5px 40px;
+  }
+  83% {
+    background-size: 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 55px, 5px 40px;
+  }
+  100% {
+    background-size: 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 40px, 5px 55px;
+  }
+}
+.loader {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(#DB4444 50px, transparent 0), linear-gradient(#DB4444 50px, transparent 0), linear-gradient(#DB4444 50px, transparent 0), linear-gradient(#DB4444 50px, transparent 0), linear-gradient(#DB4444 50px, transparent 0), linear-gradient(#DB4444 50px, transparent 0);
+  background-size: 5px 40px;
+  background-position: 0 center, 10px center, 20px center, 30px center, 40px center, 50px center;
+  animation: spikeUp 1s linear infinite alternate;
+}
+
+/*# sourceMappingURL=style.css.map */
