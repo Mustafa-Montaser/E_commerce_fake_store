@@ -1,4 +1,4 @@
-// APIs
+// APIs handling
 const store = {
     mainAPI: "https://fakestoreapi.com",
     endPoints: {
@@ -63,7 +63,7 @@ const user = {
     },
     getData: async (task, sort = "asc", limit = 0) => {
         let retVal = undefined;
-        switch (task) {
+            switch (task) {
             case user.require.categoriesNames:
                 retVal = await store.getCategories(sort, limit);
                 break;
@@ -89,8 +89,28 @@ const user = {
     }
 };
 
-// Navbar items click action
-(() => {
+// ==================== RUN MAIN APP ===================== \\
+(async () => {
+    handleNavItemsClk();
+    displayLoader("#carouselIndicators");
+    displayLoader(".browse-cont");
+    const data = await fetchCategoryData(user.require.allProducts, user.sort.asc);
+    if (data !== undefined && data.length !== 0) {
+        displayCarouselImgs(data.slice(0, 5));
+        displayCategoriesBtns();
+        carouselTrack();
+        handleCategoryBtnClk();
+        displayDefaultData(data.filter(item => String(item["category"]) === "electronics"));
+    }
+})();
+
+
+async function fetchCategoryData(category, sort = user.sort.asc, limit = 0) {
+    // 
+    return await user.getData(category, sort, limit);
+}
+
+function handleNavItemsClk() {
     const navItems = Array.from(document.querySelector("#navItems").querySelectorAll("a"));
     navItems.forEach((navItem) => {
         navItem.addEventListener("click", () => {
@@ -102,157 +122,42 @@ const user = {
             navItem.setAttribute("aria-current", "page");
         })
     });
-})();
+}
 
-const carouselTrack = () => {
-    const observer = new MutationObserver((mutationList, observer) => {
-        mutationList.forEach((mutation) => {
-            if ((mutation.type === 'attributes') && (mutation.attributeName === 'class')) {
-                if ((mutation.oldValue !== mutation.target.className) && (mutation.target.className === "carousel-item active")) {
-                    // console.log(mutation.oldValue, mutation.target.className);
-                    [...document.querySelectorAll("button[data-bs-slide-to]")].forEach((btn) => {
-                        btn.classList.remove("active");
-                    });
-                    document.querySelector(
-                        `button[data-bs-slide-to="${mutation.target.getAttribute("data-index")}"]`
-                    ).classList.add("active");
-                    // observer.disconnect();
-                }
-            }
-        });
-    });
-    observer.observe(document.querySelector(".carousel-inner"), {
-        attributes: true,
-        subtree: true,
-        attributeOldValue: true,
-        attributeFilter: ["class"]
-    });
-};
-
-const changeCategoryBtnStyle = (btnsList, btn) => {
-    btnsList.forEach((btn) => {
-        btn.classList.remove("btn-active");
-        btn.querySelector("svg").classList.remove("svg-active");
-    });
-    btn.classList.add("btn-active");
-    btn.querySelector("svg").classList.add("svg-active");
-};
-
-const fetchCategoryData = async (category, sort = user.sort.asc, limit = 0) => {
-    return await user.getData(category, sort, limit);
-};
-
-const displayCategoryData = (data) => {
-    document.querySelector("#sellingSec").innerHTML = `
-        <div class="container">
-            <div class="header d-flex justify-content-between mb-3">
-                <h4 class="text-capitalize">Best Selling Products</h4>
-                <div class="sort-btns">
-                    <button class="mx-1" data-sort="${user.sort.asc}">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </button>
-                    <button class="mx-1" data-sort="${user.sort.desc}">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="content mb-5">
-                <div class="row gx-4 gy-5">
-                    ${
-                        data.map(item => `
-                            <div class="item-cont col-12 col-md-4 col-lg-3 col-xl-2">
-                                <div class="position-relative p-4 w-100">
-                                    <img src="${item["image"]}" alt="" class="w-100 object-fit-contain" style="height: 250px">
-                                    <div class="position-absolute top-0 end-0">
-                                        <button class="border-0 rounded-5 d-flex justify-content-center align-items-center m-2">
-                                            <i class="fa-regular fa-heart d-block"></i>
-                                        </button>
-                                        <button class="border-0 rounded-5 d-flex justify-content-center align-items-center m-2">
-                                            <i class="fa-regular fa-eye d-block"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="me-auto">
-                                    <p class="my-2 fw-medium text-nowrap overflow-hidden" data-bs-toggle="tooltip" data-bs-title="${item["title"]}">
-                                        ${item["title"].split(" ").slice(0, 3).join(" ")}
-                                    </p>
-                                    <div>
-                                        <span class="text-danger fw-bold">$${item["price"]}</span>
-                                        <span class="text-decoration-line-through">$${Math.round(item["price"] * 1.3)}</span>
-                                    </div>
-                                    <div>
-                                        ${(() => {
-                                        let stars = "";
-                                        // loop over filled stars
-                                        for(let i = 0; i < Math.trunc(item["rating"]["rate"]); i++) {
-                                            stars += `<svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M14.673 7.17173C15.7437 6.36184 15.1709 4.65517 13.8284 4.65517H11.3992C10.7853 4.65517 10.243 4.25521 10.0617 3.66868L9.33754 1.32637C8.9309 0.0110567 7.0691 0.0110564 6.66246 1.32637L5.93832 3.66868C5.75699 4.25521 5.21469 4.65517 4.60078 4.65517H2.12961C0.791419 4.65517 0.215919 6.35274 1.27822 7.16654L3.39469 8.78792C3.85885 9.1435 4.05314 9.75008 3.88196 10.3092L3.11296 12.8207C2.71416 14.1232 4.22167 15.1704 5.30301 14.342L7.14861 12.9281C7.65097 12.5432 8.34903 12.5432 8.85139 12.9281L10.6807 14.3295C11.7636 15.159 13.2725 14.1079 12.8696 12.8046L12.09 10.2827C11.9159 9.71975 12.113 9.10809 12.5829 8.75263L14.673 7.17173Z" fill="#FFAD33"/>
-                                                        </svg>`;
-                                        }
-                                        // check if there half-filled-star
-                                        if(Math.round(Number((item["rating"]["rate"] - Math.trunc(item["rating"]["rate"])).toFixed(1)))) {
-                                            stars += `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M9.99993 1.83335C9.75082 1.83151 9.50631 1.90038 9.29478 2.03196C9.08326 2.16354 8.91339 2.35242 8.80493 2.57668L6.95326 6.33002L2.80993 6.93168C2.56348 6.96719 2.3319 7.071 2.14142 7.23135C1.95094 7.3917 1.80916 7.60218 1.73214 7.83896C1.65512 8.07573 1.64594 8.32935 1.70564 8.57107C1.76534 8.8128 1.89153 9.03298 2.06993 9.20668L5.06993 12.1283L4.36159 16.255C4.31946 16.5001 4.34673 16.7522 4.44032 16.9826C4.53391 17.213 4.69009 17.4127 4.89121 17.559C5.09232 17.7054 5.33036 17.7925 5.57842 17.8107C5.82648 17.8288 6.07466 17.7772 6.29493 17.6617L9.99993 15.7133V1.83335Z" fill="#FFAD33"/>
-                                                            <path opacity="0.25" d="M9.99992 1.83595C10.249 1.83404 10.5 2.00001 10.5 2.00001C10.5 2.00001 11.0865 2.20807 11.1949 2.44195L13.0466 6.35634L17.1901 6.98383C17.4365 7.02086 17.6681 7.12912 17.8586 7.29635C18.0491 7.46358 18.1908 7.68309 18.2679 7.93003C18.3449 8.17697 18.3541 8.44147 18.2944 8.69357C18.2347 8.94567 18.1085 9.1753 17.9301 9.35645L14.93 12.4035L15.6384 16.7072C15.6805 16.9629 15.6532 17.2257 15.5596 17.466C15.466 17.7064 15.3099 17.9146 15.1087 18.0672C14.9076 18.2198 14.6696 18.3107 14.4215 18.3296C14.1734 18.3486 13.9253 18.2947 13.705 18.1743L9.99992 16.1423V1.83595Z" fill="black"/>
-                                                        </svg>`;
-                                        } else {
-                                            stars += `<svg width="16" height="15" viewBox="2 2 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9.99993 1.83335C9.75082 1.83151 9.50631 1.90038 9.29478 2.03196C9.08326 2.16354 8.91339 2.35242 8.80493 2.57668L6.95326 6.33002L2.80993 6.93168C2.56348 6.96719 2.3319 7.071 2.14142 7.23135C1.95094 7.3917 1.80916 7.60218 1.73214 7.83896C1.65512 8.07573 1.64594 8.32935 1.70564 8.57107C1.76534 8.8128 1.89153 9.03298 2.06993 9.20668L5.06993 12.1283L4.36159 16.255C4.31946 16.5001 4.34673 16.7522 4.44032 16.9826C4.53391 17.213 4.69009 17.4127 4.89121 17.559C5.09232 17.7054 5.33036 17.7925 5.57842 17.8107C5.82648 17.8288 6.07466 17.7772 6.29493 17.6617L9.99993 15.7133V1.83335Z" fill="#FFAD33"/>
-                                                        <path opacity="0.25" d="M9.99992 1.83595C10.249 1.83404 10.5 2.00001 10.5 2.00001C10.5 2.00001 11.0865 2.20807 11.1949 2.44195L13.0466 6.35634L17.1901 6.98383C17.4365 7.02086 17.6681 7.12912 17.8586 7.29635C18.0491 7.46358 18.1908 7.68309 18.2679 7.93003C18.3449 8.17697 18.3541 8.44147 18.2944 8.69357C18.2347 8.94567 18.1085 9.1753 17.9301 9.35645L14.93 12.4035L15.6384 16.7072C15.6805 16.9629 15.6532 17.2257 15.5596 17.466C15.466 17.7064 15.3099 17.9146 15.1087 18.0672C14.9076 18.2198 14.6696 18.3107 14.4215 18.3296C14.1734 18.3486 13.9253 18.2947 13.705 18.1743L9.99992 16.1423V1.83595Z" fill="black"/>
-                                                    </svg>`;
-                                        }
-                                        // loop over empty stars
-                                        for (let i = 0; i < (5 - Math.trunc(item["rating"]["rate"]) - 1); i++) {
-                                            stars += `<svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M14.673 7.17173C15.7437 6.36184 15.1709 4.65517 13.8284 4.65517H11.3992C10.7853 4.65517 10.243 4.25521 10.0617 3.66868L9.33754 1.32637C8.9309 0.0110567 7.0691 0.0110564 6.66246 1.32637L5.93832 3.66868C5.75699 4.25521 5.21469 4.65517 4.60078 4.65517H2.12961C0.791419 4.65517 0.215919 6.35274 1.27822 7.16654L3.39469 8.78792C3.85885 9.1435 4.05314 9.75008 3.88196 10.3092L3.11296 12.8207C2.71416 14.1232 4.22167 15.1704 5.30301 14.342L7.14861 12.9281C7.65097 12.5432 8.34903 12.5432 8.85139 12.9281L10.6807 14.3295C11.7636 15.159 13.2725 14.1079 12.8696 12.8046L12.09 10.2827C11.9159 9.71975 12.113 9.10809 12.5829 8.75263L14.673 7.17173Z" fill="#c3bdbd"/>
-                                                    </svg>`;
-                                        }
-                                        return stars;
-                                        })()}
-                                        <span>(${item["rating"]["count"]})</span>
-                                    </div>
-                                </div>
-                            </div>`).join("")
-                    }
-                </div>
-            </div>
-        </div>`;
-};
-
-const enableItemTitleTooltip = () => {
+function enableItemTitleTooltip() {
     [...document.querySelectorAll('[data-bs-toggle="tooltip"]')]
         .map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-};
+}
 
-const displayLoader = (container) => {
+function displayLoader(container) {
     document.querySelector(container).innerHTML = `
         <div class="loading-cont d-flex justify-content-center align-items-center">
             <span class="loader"></span>
         </div>`;
-};
+}
 
-const renderNewData = (data) => {
+function renderNewData(data) {
     displayCategoryData(data);
     enableItemTitleTooltip();
     handleSortBtns();
 }
 
-const handleSortBtns = () => {
+function handleSortBtns() {
     const sortBtns = Array.from(document.querySelectorAll(".sort-btns button"));
     let currentCategory = "";
     sortBtns.forEach((sortBtn) => {
         sortBtn.addEventListener("click", async () => {
-            if(!sortBtn.classList.contains("sort-btn-active")) {
+            if (!sortBtn.classList.contains("sort-btn-active")) {
                 const categoryBtns = Array.from(document.querySelectorAll(".btn-cont > div > button"));
                 for (let i = 0; i < categoryBtns.length; i++) {
-                    if(categoryBtns[i].classList.contains("btn-active")) {
+                    if (categoryBtns[i].classList.contains("btn-active")) {
                         currentCategory = categoryBtns[i].getAttribute("category-data");
                         const sortType = sortBtn.getAttribute("data-sort");
                         displayLoader("#sellingSec");
                         const data = await fetchCategoryData(currentCategory, sortType);
-                        if(data !== undefined) {
+                        if (data !== undefined) {
                             renderNewData(data);
-                            document.querySelector(`button[data-sort='${sortType}']`).classList.add("sort-btn-active");
+                            changeSortBtnStyle(sortType);
                         }
                         break;
                     }
@@ -260,26 +165,40 @@ const handleSortBtns = () => {
             }
         });
     });
-};
+}
 
-const handleCategoryBtnClk = () => {
+function changeSortBtnStyle(sortType) {
+    document.querySelector(`button[data-sort='${sortType}']`)
+        .classList.add("sort-btn-active");
+}
+
+function handleCategoryBtnClk() {
     const categoryBtns = Array.from(document.querySelectorAll(".btn-cont > div > button"));
     categoryBtns.forEach((btn) => {
         btn.addEventListener("click", async () => {
-            if(!btn.classList.contains("btn-active")) {
+            if (!btn.classList.contains("btn-active")) {
                 changeCategoryBtnStyle(categoryBtns, btn);
                 displayLoader("#sellingSec");
                 const data = await fetchCategoryData(btn.getAttribute("category-data"));
-                if(data !== undefined) {
+                if (data !== undefined) {
                     renderNewData(data);
-                    document.querySelector("button[data-sort='asc']").classList.add("sort-btn-active");
+                    changeSortBtnStyle("asc");
                 }
             }
         });
     });
-};
+}
 
-const displayCategoriesBtns = () => {
+function changeCategoryBtnStyle(btnsList, btn) {
+    btnsList.forEach((btn) => {
+        btn.classList.remove("btn-active");
+        btn.querySelector("svg").classList.remove("svg-active");
+    });
+    btn.classList.add("btn-active");
+    btn.querySelector("svg").classList.add("svg-active");
+}
+
+function displayCategoriesBtns() {
     document.querySelector(".browse-cont").innerHTML = `
         <div class="container">
             <h3 class="text-capitalize">categories</h3>
@@ -359,9 +278,9 @@ const displayCategoriesBtns = () => {
                 </div>
             </div>
         </div>`;
-};
+}
 
-const displayCarouselImgs = (data) => {
+function displayCarouselImgs(data) {
     document.querySelector("#carouselIndicators").innerHTML = `
         <div class="carousel-indicators align-items-center">
             ${
@@ -392,28 +311,127 @@ const displayCarouselImgs = (data) => {
             <span class="visually-hidden">Next</span>
         </button>
     `;
-};
+}
 
-const displayDefaultData = (data) => {
+function displayDefaultData(data) {
     renderNewData(data);
     document.querySelector("button[category-data='electronics']").classList.add("btn-active");
     document.querySelector("button[category-data='electronics'] svg").classList.add("svg-active");
-    document.querySelector("button[data-sort='asc']").classList.add("sort-btn-active");
+    changeSortBtnStyle("asc");
 }
 
+function displayCategoryData(data) {
+    document.querySelector("#sellingSec").innerHTML = `
+        <div class="container">
+            <div class="header d-flex justify-content-between mb-3">
+                <h4 class="text-capitalize">Best Selling Products</h4>
+                <div class="sort-btns">
+                    <button class="mx-1" data-sort="${user.sort.asc}">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                    <button class="mx-1" data-sort="${user.sort.desc}">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="content mb-5">
+                <div class="row gx-4 gy-5">
+                    ${
+                        data.map(item => `<div class="item-cont col-12 col-md-4 col-lg-3 col-xl-2">
+                                                <div class="position-relative p-4 w-100">
+                                                    <img src="${item["image"]}" alt="" class="w-100 object-fit-contain" style="height: 250px">
+                                                    <div class="position-absolute top-0 end-0">
+                                                        <button class="border-0 rounded-5 d-flex justify-content-center align-items-center m-2">
+                                                            <i class="fa-regular fa-heart d-block"></i>
+                                                        </button>
+                                                        <button class="border-0 rounded-5 d-flex justify-content-center align-items-center m-2"
+                                                                data-bs-toggle="modal" data-bs-target="#${item["id"]}">
+                                                            <i class="fa-regular fa-eye d-block"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="me-auto">
+                                                    <p class="my-2 fw-medium text-nowrap overflow-hidden" data-bs-toggle="tooltip" data-bs-title="${item["title"]}">
+                                                        ${item["title"].split(" ").slice(0, 3).join(" ")}
+                                                    </p>
+                                                    <div>
+                                                        <span class="text-danger fw-bold">$${item["price"]}</span>
+                                                        <span class="text-decoration-line-through">$${Math.round(item["price"] * 1.3)}</span>
+                                                    </div>
+                                                    <div>
+                                                        ${(() => {
+                                                            let stars = "";
+                                                            // loop over filled stars
+                                                            for (let i = 0; i < Math.trunc(item["rating"]["rate"]); i++) {
+                                                                stars += `<svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M14.673 7.17173C15.7437 6.36184 15.1709 4.65517 13.8284 4.65517H11.3992C10.7853 4.65517 10.243 4.25521 10.0617 3.66868L9.33754 1.32637C8.9309 0.0110567 7.0691 0.0110564 6.66246 1.32637L5.93832 3.66868C5.75699 4.25521 5.21469 4.65517 4.60078 4.65517H2.12961C0.791419 4.65517 0.215919 6.35274 1.27822 7.16654L3.39469 8.78792C3.85885 9.1435 4.05314 9.75008 3.88196 10.3092L3.11296 12.8207C2.71416 14.1232 4.22167 15.1704 5.30301 14.342L7.14861 12.9281C7.65097 12.5432 8.34903 12.5432 8.85139 12.9281L10.6807 14.3295C11.7636 15.159 13.2725 14.1079 12.8696 12.8046L12.09 10.2827C11.9159 9.71975 12.113 9.10809 12.5829 8.75263L14.673 7.17173Z" fill="#FFAD33"/>
+                                                                            </svg>`;
+                                                            }
+                                                            // check if there half-filled-star
+                                                            if (Math.round(Number((item["rating"]["rate"] - Math.trunc(item["rating"]["rate"])).toFixed(1)))) {
+                                                                stars += `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M9.99993 1.83335C9.75082 1.83151 9.50631 1.90038 9.29478 2.03196C9.08326 2.16354 8.91339 2.35242 8.80493 2.57668L6.95326 6.33002L2.80993 6.93168C2.56348 6.96719 2.3319 7.071 2.14142 7.23135C1.95094 7.3917 1.80916 7.60218 1.73214 7.83896C1.65512 8.07573 1.64594 8.32935 1.70564 8.57107C1.76534 8.8128 1.89153 9.03298 2.06993 9.20668L5.06993 12.1283L4.36159 16.255C4.31946 16.5001 4.34673 16.7522 4.44032 16.9826C4.53391 17.213 4.69009 17.4127 4.89121 17.559C5.09232 17.7054 5.33036 17.7925 5.57842 17.8107C5.82648 17.8288 6.07466 17.7772 6.29493 17.6617L9.99993 15.7133V1.83335Z" fill="#FFAD33"/>
+                                                                                <path opacity="0.25" d="M9.99992 1.83595C10.249 1.83404 10.5 2.00001 10.5 2.00001C10.5 2.00001 11.0865 2.20807 11.1949 2.44195L13.0466 6.35634L17.1901 6.98383C17.4365 7.02086 17.6681 7.12912 17.8586 7.29635C18.0491 7.46358 18.1908 7.68309 18.2679 7.93003C18.3449 8.17697 18.3541 8.44147 18.2944 8.69357C18.2347 8.94567 18.1085 9.1753 17.9301 9.35645L14.93 12.4035L15.6384 16.7072C15.6805 16.9629 15.6532 17.2257 15.5596 17.466C15.466 17.7064 15.3099 17.9146 15.1087 18.0672C14.9076 18.2198 14.6696 18.3107 14.4215 18.3296C14.1734 18.3486 13.9253 18.2947 13.705 18.1743L9.99992 16.1423V1.83595Z" fill="black"/>
+                                                                            </svg>`;
+                                                            } else {
+                                                                stars += `<svg width="16" height="15" viewBox="2 2 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M9.99993 1.83335C9.75082 1.83151 9.50631 1.90038 9.29478 2.03196C9.08326 2.16354 8.91339 2.35242 8.80493 2.57668L6.95326 6.33002L2.80993 6.93168C2.56348 6.96719 2.3319 7.071 2.14142 7.23135C1.95094 7.3917 1.80916 7.60218 1.73214 7.83896C1.65512 8.07573 1.64594 8.32935 1.70564 8.57107C1.76534 8.8128 1.89153 9.03298 2.06993 9.20668L5.06993 12.1283L4.36159 16.255C4.31946 16.5001 4.34673 16.7522 4.44032 16.9826C4.53391 17.213 4.69009 17.4127 4.89121 17.559C5.09232 17.7054 5.33036 17.7925 5.57842 17.8107C5.82648 17.8288 6.07466 17.7772 6.29493 17.6617L9.99993 15.7133V1.83335Z" fill="#FFAD33"/>
+                                                                                <path opacity="0.25" d="M9.99992 1.83595C10.249 1.83404 10.5 2.00001 10.5 2.00001C10.5 2.00001 11.0865 2.20807 11.1949 2.44195L13.0466 6.35634L17.1901 6.98383C17.4365 7.02086 17.6681 7.12912 17.8586 7.29635C18.0491 7.46358 18.1908 7.68309 18.2679 7.93003C18.3449 8.17697 18.3541 8.44147 18.2944 8.69357C18.2347 8.94567 18.1085 9.1753 17.9301 9.35645L14.93 12.4035L15.6384 16.7072C15.6805 16.9629 15.6532 17.2257 15.5596 17.466C15.466 17.7064 15.3099 17.9146 15.1087 18.0672C14.9076 18.2198 14.6696 18.3107 14.4215 18.3296C14.1734 18.3486 13.9253 18.2947 13.705 18.1743L9.99992 16.1423V1.83595Z" fill="black"/>
+                                                                            </svg>`;
+                                                            }
+                                                            // loop over empty stars
+                                                            for (let i = 0; i < (5 - Math.trunc(item["rating"]["rate"]) - 1); i++) {
+                                                                stars += `<svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M14.673 7.17173C15.7437 6.36184 15.1709 4.65517 13.8284 4.65517H11.3992C10.7853 4.65517 10.243 4.25521 10.0617 3.66868L9.33754 1.32637C8.9309 0.0110567 7.0691 0.0110564 6.66246 1.32637L5.93832 3.66868C5.75699 4.25521 5.21469 4.65517 4.60078 4.65517H2.12961C0.791419 4.65517 0.215919 6.35274 1.27822 7.16654L3.39469 8.78792C3.85885 9.1435 4.05314 9.75008 3.88196 10.3092L3.11296 12.8207C2.71416 14.1232 4.22167 15.1704 5.30301 14.342L7.14861 12.9281C7.65097 12.5432 8.34903 12.5432 8.85139 12.9281L10.6807 14.3295C11.7636 15.159 13.2725 14.1079 12.8696 12.8046L12.09 10.2827C11.9159 9.71975 12.113 9.10809 12.5829 8.75263L14.673 7.17173Z" fill="#c3bdbd"/>
+                                                                            </svg>`;
+                                                            }
+                                                            return stars;
+                                                        })()}
+                                                        <span>(${item["rating"]["count"]})</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal section -->
+                                            <div class="modal fade " id="${item["id"]}" tabindex="-1" aria-labelledby="item${item["id"]}ModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <img src="${item["image"]}" alt="" class="w-100 object-fit-contain" style="height: 250px">
+                                                            <p class="my-2 fw-medium card p-3">${item["title"]}</p>
+                                                            <p class="my-2 fw-medium card p-3">${item["description"]}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`).join("")
+                    }
+                </div>
+            </div>
+        </div>`;
+}
 
-// ==================== RUN MAIN APP ===================== \\
-(async () => {
-    displayLoader("#carouselIndicators");
-    displayLoader(".browse-cont");
-    const data = await user.getData(user.require.allProducts, user.sort.asc);
-    if (data !== undefined && data.length !== 0) {
-        displayCarouselImgs(data.slice(0, 5));
-        displayCategoriesBtns();
-        carouselTrack();
-        handleCategoryBtnClk();
-        displayDefaultData(data.filter(item => String(item["category"]) === "electronics"));
-    }
-})();
-
-
+function carouselTrack() {
+    const observer = new MutationObserver((mutationList, observer) => {
+        mutationList.forEach((mutation) => {
+            if ((mutation.type === 'attributes') && (mutation.attributeName === 'class')) {
+                if ((mutation.oldValue !== mutation.target.className) && (mutation.target.className === "carousel-item active")) {
+                    [...document.querySelectorAll("button[data-bs-slide-to]")].forEach((btn) => {
+                        btn.classList.remove("active");
+                    });
+                    document.querySelector(
+                        `button[data-bs-slide-to="${mutation.target.getAttribute("data-index")}"]`
+                    ).classList.add("active");
+                    // observer.disconnect();
+                }
+            }
+        });
+    });
+    observer.observe(document.querySelector(".carousel-inner"), {
+        attributes: true,
+        subtree: true,
+        attributeOldValue: true,
+        attributeFilter: ["class"]
+    });
+}

@@ -139,6 +139,27 @@ header nav .container > div > div .active {
   color: #fff;
 }
 
+footer {
+  padding: 60px 0 !important;
+}
+footer .container .row > div { /* col */ }
+footer .container .row > div > div a {
+  transition: all 200ms linear;
+}
+footer .container .row > div > div a:hover {
+  color: #DB4444 !important;
+}
+footer .container .row > div > div form div {
+  width: fit-content;
+}
+footer .container .row > div > div form div input {
+  outline: none;
+}
+footer .container .row > div:nth-child(5) > div > p {
+  color: #FAFAFA;
+  font-size: 12px;
+}
+
 @keyframes spikeUp {
   0% {
     background-size: 5px 40px;

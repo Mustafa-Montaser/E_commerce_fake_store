@@ -207,6 +207,47 @@ header {
     }
 }
 
+footer {
+    padding: 60px 0 !important;
+    
+    .container {
+        .row {
+            > div { /* col */
+                
+                > div {
+                    
+                    a {
+                        transition: all 200ms linear;
+                        
+                        &:hover {
+                            color: $mainColor !important;
+                        }
+                    }
+                    
+                    form {
+                        div {
+                            width: fit-content;
+                            
+                            input {
+                                outline: none;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            > div:nth-child(5) {
+                > div {
+                    > p {
+                        color: #FAFAFA;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 // loading
 @keyframes spikeUp {
     0% {

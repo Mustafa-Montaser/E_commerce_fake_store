@@ -63,9 +63,120 @@
         <!-- End Best Selling Section -->
         
         <!-- Start footer Section -->
-        <div style="height: 50vh; width: 100%; background-color: black"></div>
+        <footer class="bg-black w-100">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="text-white">
+                            <h5 class="mb-4">Exclusive</h5>
+                            <a href="#" class="text-white text-decoration-none">Subscribe</a>
+                            <p class="mt-2">Get 10% off your first order</p>
+                            <form>
+                                <div class="border border-1 border-white p-2 rounded d-flex">
+                                    <label for="userEmail" class="form-label"></label>
+                                    <input type="email" id="userEmail" placeholder="Enter Your Email"
+                                           class="bg-transparent mx-0 border-0 text-white" required>
+                                    <button type="submit" class="bg-transparent border-0 mx-0">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9.91196 12H3.99996L2.02296 4.13505C2.0103 4.08934 2.00259 4.0424 1.99996 3.99505C1.97796 3.27405 2.77196 2.77405 3.45996 3.10405L22 12L3.45996 20.896C2.77996 21.223 1.99596 20.737 1.99996 20.029C2.00198 19.9658 2.0131 19.9031 2.03296 19.843L3.49996 15" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="text-white">
+                            <h5 class="mb-4">Support</h5>
+                            <p class="text-wrap mb-2">111 Bijoy sarani, Dhaka,  DH 1515, Bangladesh.</p>
+                            <a href="mailto:exclusive@gmail.com" class="text-white text-decoration-none d-block my-1">exclusive@gmail.com</a>
+                            <p class="mt-2">+88015-88888-9999</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl">
+                        <div class="text-white">
+                            <h5 class="mb-4">Account</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">My Account</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Login / Register</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Cart</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Wishlist</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Shop</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl">
+                        <div class="text-white">
+                            <h5 class="mb-4">Quick Link</h5>
+                            <ul class="list-unstyled">
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Terms Of Use</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+                                <li class="my-2"><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl d-flex justify-content-start justify-content-xl-end">
+                        <div class="text-white">
+                            <h5 class="mb-4">Download App</h5>
+                            <p>Save $3 with App New User Only</p>
+                            <div class="d-flex align-items-center">
+                                <div><img src="./assets/imgs/Qr%20Code.svg" alt=""></div>
+                                <div class="d-flex flex-column align-items-stretch">
+                                    <button class="bg-transparent border-0 mb-2"><img src="./assets/imgs/google-play-logo.svg" alt=""></button>
+                                    <button class="bg-transparent border-0"><img src="./assets/imgs/download-appstore.svg" alt=""></button>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled d-flex mt-3">
+                                <li class="me-3">
+                                    <a href="#" class="text-white text-decoration-none p-2">
+                                        <i class="fa-brands fa-facebook-f"></i>
+                                    </a>
+                                </li>
+                                <li class="me-3">
+                                    <a href="#" class="text-white text-decoration-none p-2">
+                                        <i class="fa-brands fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="me-3">
+                                    <a href="#" class="text-white text-decoration-none p-2">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="me-3">
+                                    <a href="#" class="text-white text-decoration-none p-2">
+                                        <i class="fa-brands fa-linkedin-in"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
         <!-- End footer Section -->
         
+        
+        <!-- Button trigger modal -->
+<!--        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">-->
+<!--            Launch demo modal-->
+<!--        </button>-->
+        
+        <!-- Modal -->
+        <!--  modal-dialog modal-dialog-centered -->
+        <!--    modal fade position-absolute top-50 start-50 translate-middle    -->
+        <div class="modal fade " id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        body
+                    </div>
+                </div>
+            </div>
+        </div>
         
         
         <!-- ============================================================================== -->
